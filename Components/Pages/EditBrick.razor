@@ -1,0 +1,69 @@
+﻿@page "/editbrick"
+@inject NavigationManager NavigationManager
+@inject OwnedClient Owned
+@inject ColorsClient Colors
+
+<PageTitle>New Brick</PageTitle>
+
+<h3>New Brick</h3>
+
+@if(colors is null)
+{
+	<p><em>Loading...</em></p>
+}
+else
+{
+	<div class="row">
+		<div class="col-md-4">
+			<EditForm Model="@brick" FormName="editBrick" OnSubmit="HandleSubmit">
+				<div class="mb-3">
+					<label for="brickId" class="form-label">Brick Id:</label>
+					<InputText id="brickId" @bind-Value="brick.BrickId" class="form-control" />      
+				</div>
+				<div class="mb-3">
+					<label for="color" class="form-label">Color:</label>
+					<InputSelect id="color" @bind-Value="brick.ColorId" class="form-control">
+						<option value="">Select a color</option>
+						@foreach (var color in colors)
+						{
+							<option value="@color.Id">@color.Name</option>
+						}
+					</InputSelect>
+				</div>
+				<div class="mb-3">
+					<label for="count" class="form-label">Count:</label>
+					<InputNumber id="count" @bind-Value="brick.Count" class="form-control" />
+				</div>
+				<div class="mb-3">
+					<label for="locationId" class="form-label">Location Id:</label>
+					<InputText id="locationId" @bind-Value="brick.LocationId" class="form-control" />
+				</div>
+				<button type="submit" class="btn btn-primary">Save</button>
+				<a role="button" class="btn btn-secondary" href="/">Cancel</a>
+			</EditForm>
+		</div>
+	</div>
+}
+
+@code {
+	[SupplyParameterFromForm]
+	private BrickDetails brick { get; set; } = new()
+		{
+			BrickId = string.Empty,
+			Count = 0,
+			LocationId = string.Empty
+		};
+
+	private ColorList[]? colors;
+
+	protected override void OnInitialized()
+	{
+		colors = Colors.GetColors();
+	}
+
+	private void HandleSubmit()
+	{
+		Owned.AddBrick(brick);
+		NavigationManager.NavigateTo("/owned");
+	}
+}

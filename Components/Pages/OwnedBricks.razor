@@ -1,0 +1,50 @@
+﻿@page "/owned"
+@inject OwnedClient Owned
+
+<PageTitle>Owned Bricks</PageTitle>
+
+<div class="mt-2 mb-2">
+    <a class="btn btn-primary" role="button" href="/editbrick">Add Brick</a>
+</div>
+
+@if (bricks is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table table-striped table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Brick Id</th>
+                <th>Color</th>
+                <th>Count</th>
+                <th>Location Id</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var brick in bricks)
+            {
+                <tr>
+                    <td>@brick.BrickId</td>
+                    <td>@brick.Color</td>
+                    <td>@brick.Count</td>
+                    <td>@brick.LocationId</td>
+                    <td>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    
+    private OwnedBrick[]? bricks;
+
+    protected override void OnInitialized()
+    {
+        bricks = Owned.GetOwnedBricks();
+    }
+}

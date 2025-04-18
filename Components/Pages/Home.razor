@@ -1,0 +1,66 @@
+﻿@page "/"
+
+
+<PageTitle>Lego Collection</PageTitle>
+
+@if (bricks is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table table-striped table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>BrickId</th>
+                <th>Description</th>
+                <th>Category</th>
+                <th>Subcategory</th>
+                <th>Container</th>
+                <th>Unit</th>
+                <th>UnitRow</th>
+                <th>Drawer</th>
+                <th>Color</th>
+                <th>Count</th>
+                <th>Overloaded</th>
+                <th>Underfilled</th>
+                <th>LocEmpty</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var brick in bricks)
+            {
+                <tr>
+                    <td>@brick.BrickId</td>
+                    <td>@brick.Description</td>
+                    <td>@brick.Category</td>
+                    <td>@brick.Subcategory</td>
+                    <td>@brick.Container</td>
+                    <td>@brick.Unit</td>
+                    <td>@brick.UnitRow</td>
+                    <td>@brick.Drawer</td>
+                    <td>@brick.Color</td>
+                    <td>@brick.Count</td>
+                    <td>@brick.Overloaded</td>
+                    <td>@brick.Underfilled</td>
+                    <td>@brick.LocEmpty</td>
+                    <td>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private FullBrickReportClient brickReportClient = new();
+
+    private BrickReport[]? bricks;
+
+    protected override void OnInitialized()
+    {
+        bricks = brickReportClient.GetBrickReport();
+    }
+}
