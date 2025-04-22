@@ -1,13 +1,15 @@
 ﻿@page "/editbrick"
+@page "/editbrick/{Id:int}"
+
 @inject NavigationManager NavigationManager
 @inject OwnedClient Owned
 @inject ColorsClient Colors
 
-<PageTitle>New Brick</PageTitle>
+<PageTitle>@title</PageTitle>
 
-<h3>New Brick</h3>
+<h3>@title</h3>
 
-@if(colors is null)
+@if(colors is null || brick is null)
 {
 	<p><em>Loading...</em></p>
 }
@@ -15,10 +17,13 @@ else
 {
 	<div class="row">
 		<div class="col-md-4">
-			<EditForm Model="@brick" FormName="editBrick" OnSubmit="HandleSubmit">
+			<EditForm Model="@brick" FormName="editBrick" OnValidSubmit="HandleSubmit">
+				<DataAnnotationsValidator />
+				<ValidationSummary />
 				<div class="mb-3">
 					<label for="brickId" class="form-label">Brick Id:</label>
 					<InputText id="brickId" @bind-Value="brick.BrickId" class="form-control" />      
+					<ValidationMessage For="() => brick.BrickId" />
 				</div>
 				<div class="mb-3">
 					<label for="color" class="form-label">Color:</label>
@@ -29,10 +34,12 @@ else
 							<option value="@color.Id">@color.Name</option>
 						}
 					</InputSelect>
+					<ValidationMessage For="() => brick.ColorId" />
 				</div>
 				<div class="mb-3">
 					<label for="count" class="form-label">Count:</label>
 					<InputNumber id="count" @bind-Value="brick.Count" class="form-control" />
+					<ValidationMessage For="() => brick.Count" />
 				</div>
 				<div class="mb-3">
 					<label for="locationId" class="form-label">Location Id:</label>
@@ -46,15 +53,39 @@ else
 }
 
 @code {
+	[Parameter]
+	public int? Id { get; set; }
+
 	[SupplyParameterFromForm]
-	private BrickDetails brick { get; set; } = new()
-		{
-			BrickId = string.Empty,
-			Count = 0,
-			LocationId = string.Empty
-		};
+	private BrickDetails? brick { get; set; } 
 
 	private ColorList[]? colors;
+
+	private string title = string.Empty;
+
+	protected override void OnParametersSet()
+	{
+		if (brick is not null)
+		{
+			return;
+		}
+
+		if (Id is not null)
+		{
+			brick = Owned.GetBrick(Id.Value);
+			title = $"Edit {brick.BrickId}";
+		} 
+		else
+		{
+			brick = new()
+			{
+				BrickId = string.Empty,
+				Count = 0,
+				LocationId = string.Empty
+			};
+			title = "New Brick";
+		}
+	}
 
 	protected override void OnInitialized()
 	{
@@ -63,7 +94,16 @@ else
 
 	private void HandleSubmit()
 	{
-		Owned.AddBrick(brick);
+		ArgumentNullException.ThrowIfNull(brick);
+		if (Id is null)
+		{
+			Owned.AddBrick(brick);			
+		} else
+		{
+			brick.Id = Id.Value;
+			Owned.UpdateBrick(brick);
+		}
+
 		NavigationManager.NavigateTo("/owned");
 	}
 }
