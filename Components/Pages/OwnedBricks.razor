@@ -32,6 +32,15 @@ else
                     <td>@brick.Count</td>
                     <td>@brick.LocationId</td>
                     <td>
+                        <div class="d-flex">
+                            <a class="btn btn-primary me-2" role="button" href="@OwnedUrl(brick.Id)">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="@GetDeleteModalId(brick)">
+                                <i class="bi bi-x-lg"></i>
+                            </button>
+                        </div>
+                        <DeleteOwned Brick="@brick" />
                     </td>
                 </tr>
             }
@@ -40,11 +49,18 @@ else
 }
 
 @code {
-    
+
     private OwnedBrick[]? bricks;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        bricks = Owned.GetOwnedBricks();
+        bricks = await Owned.GetOwnedBricksAsync();
+    }
+
+    private static string OwnedUrl(int id) => $"/editbrick/{id}";
+
+    private string GetDeleteModalId(OwnedBrick brick)
+    {
+        return $"#{DeleteOwned.GetModalId(brick)}";
     }
 }

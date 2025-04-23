@@ -1,8 +1,9 @@
 ﻿using LegoCollectionUI.Models;
+using System.Net.Http;
 
 namespace LegoCollectionUI.Clients
 {
-    public class FullBrickReportClient
+    public class FullBrickReportClient (HttpClient httpClient)
     {
         private readonly List<BrickReport> bricks =
         [
@@ -65,6 +66,6 @@ namespace LegoCollectionUI.Clients
         ];
 
 
-        public BrickReport[] GetBrickReport() => [.. bricks];
+        public async Task<BrickReport[]> GetBrickReportAsync() => await httpClient.GetFromJsonAsync<BrickReport[]>("/") ?? [];
     }
 }

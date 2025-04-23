@@ -12,9 +12,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
+var legoCollectionApiUrl = builder.Configuration["LegoCollectionApiUrl"] ?? throw new Exception("LegoCollectionApiUrl is not set");
+
+builder.Services.AddHttpClient<OwnedClient>(client => client.BaseAddress = new Uri(legoCollectionApiUrl));
+builder.Services.AddHttpClient<ColorsClient>(client => client.BaseAddress = new Uri(legoCollectionApiUrl));
+builder.Services.AddHttpClient<FullBrickReportClient>(client => client.BaseAddress = new Uri(legoCollectionApiUrl));
+
 //Add Clients to IServiceProviders for lifetime of app
-builder.Services.AddSingleton<OwnedClient>();
-builder.Services.AddSingleton<ColorsClient>();
+//builder.Services.AddSingleton<OwnedClient>();
+//builder.Services.AddSingleton<ColorsClient>();
 
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<IdentityUserAccessor>();

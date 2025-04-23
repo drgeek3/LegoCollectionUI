@@ -1,5 +1,5 @@
 ﻿@page "/"
-
+@inject FullBrickReportClient brickReportClient
 
 <PageTitle>Lego Collection</PageTitle>
 
@@ -55,12 +55,11 @@ else
 }
 
 @code {
-    private FullBrickReportClient brickReportClient = new();
 
     private BrickReport[]? bricks;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        bricks = brickReportClient.GetBrickReport();
+        bricks = await brickReportClient.GetBrickReportAsync();
     }
 }

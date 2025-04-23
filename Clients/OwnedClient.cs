@@ -2,7 +2,7 @@
 
 namespace LegoCollectionUI.Clients
 {
-    public class OwnedClient
+    public class OwnedClient(HttpClient httpClient)
     {
         private readonly List<OwnedBrick> bricks =
         [
@@ -32,9 +32,9 @@ namespace LegoCollectionUI.Clients
             LocationId = "RA28"    }
         ];
 
-        private readonly ColorList[] colors = new ColorsClient().GetColors();
+        private readonly ColorList[] colors = new ColorsClient(httpClient).GetColors();
 
-        public OwnedBrick[] GetOwnedBricks() => [.. bricks];
+        public async Task<OwnedBrick[]> GetOwnedBricksAsync() => await httpClient.GetFromJsonAsync<OwnedBrick[]>("owned") ?? [];
 
         public void AddBrick(BrickDetails brick)
         {
@@ -76,6 +76,12 @@ namespace LegoCollectionUI.Clients
             existingBrick.Color = color.Name;
             existingBrick.Count = updatedBrick.Count;
             existingBrick.LocationId = updatedBrick.LocationId;
+        }
+
+        public void DeleteBrick(int id)
+        {
+            var brick = GetBrickSummaryById(id);
+            bricks.Remove(brick);
         }
 
         private OwnedBrick GetBrickSummaryById(int id)

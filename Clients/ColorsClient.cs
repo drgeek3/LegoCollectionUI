@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Query;
 
 namespace LegoCollectionUI.Clients
 {
-    public class ColorsClient
+    public class ColorsClient(HttpClient httpClient)
     {
         private readonly ColorList[] colors =
             [
@@ -26,6 +26,26 @@ namespace LegoCollectionUI.Clients
             new(){
                 Id = 5,
                 Name="Black"
+            },
+            new(){
+                Id = 6,
+                Name="Brown"
+            },
+            new(){
+                Id = 7,
+                Name="Blue"
+            },
+            new(){
+                Id = 8,
+                Name="Purple"
+            },
+            new(){
+                Id = 9,
+                Name="Clear"
+            },
+            new(){
+                Id = 10,
+                Name="Lime"
             }
             ];
 

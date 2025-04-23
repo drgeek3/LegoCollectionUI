@@ -1,5 +1,6 @@
 ﻿@page "/editbrick"
 @page "/editbrick/{Id:int}"
+@rendermode InteractiveServer
 
 @inject NavigationManager NavigationManager
 @inject OwnedClient Owned
@@ -46,7 +47,7 @@ else
 					<InputText id="locationId" @bind-Value="brick.LocationId" class="form-control" />
 				</div>
 				<button type="submit" class="btn btn-primary">Save</button>
-				<a role="button" class="btn btn-secondary" href="/">Cancel</a>
+				<a role="button" class="btn btn-secondary" href="/owned">Cancel</a>
 			</EditForm>
 		</div>
 	</div>
