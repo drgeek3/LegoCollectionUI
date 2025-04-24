@@ -1,8 +1,13 @@
 ﻿@page "/"
 @inject FullBrickReportClient brickReportClient
 @attribute [StreamRendering]
+@rendermode InteractiveServer
 
 <PageTitle>Lego Collection</PageTitle>
+
+<div class="w-100">
+    <SearchBox Items="bricks" OnSearch="UpdateFilteredBricks"></SearchBox>
+</div>
 
 @if (bricks is null)
 {
@@ -13,19 +18,19 @@ else
     <table class="table table-striped table-bordered table-hover">
         <thead class="table-dark">
             <tr>
-                <th>BrickId</th>
+                <th>Brick Id</th>
                 <th>Description</th>
                 <th>Category</th>
                 <th>Subcategory</th>
                 <th>Container</th>
                 <th>Unit</th>
-                <th>UnitRow</th>
+                <th>Unit Row</th>
                 <th>Drawer</th>
                 <th>Color</th>
                 <th>Count</th>
                 <th>Overloaded</th>
                 <th>Underfilled</th>
-                <th>LocEmpty</th>
+                <th>Empty</th>
                 <th></th>
             </tr>
         </thead>
@@ -57,10 +62,25 @@ else
 
 @code {
 
-    private BrickReport[]? bricks;
+    private List<BrickReport>? bricks;
+    private List<BrickReport>? filteredBricks = new();
 
     protected override async Task OnInitializedAsync()
     {
         bricks = await brickReportClient.GetBrickReportAsync();
+        //filteredBricks = bricks.ToList();
+    }
+
+    private async Task UpdateFilteredBricks(string searchTerm)
+    {
+        if (string.IsNullOrEmpty(searchTerm))
+        {
+            bricks = await brickReportClient.GetBrickReportAsync();
+        }
+        else
+        {
+            bricks = await brickReportClient.GetSingleBrickAsync(searchTerm);
+        }
+        
     }
 }
