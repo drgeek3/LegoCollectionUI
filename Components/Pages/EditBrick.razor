@@ -38,9 +38,14 @@ else
 					<ValidationMessage For="() => brick.ColorId" />
 				</div>
 				<div class="mb-3">
-					<label for="count" class="form-label">Count:</label>
-					<InputNumber id="count" @bind-Value="brick.Count" class="form-control" />
-					<ValidationMessage For="() => brick.Count" />
+					<label for="count" class="form-label">Number Available:</label>
+					<InputNumber id="count" @bind-Value="brick.NumAvailable" class="form-control" />
+					<ValidationMessage For="() => brick.NumAvailable" />
+				</div>
+				<div class="mb-3">
+					<label for="count" class="form-label">Number In Use:</label>
+					<InputNumber id="count" @bind-Value="brick.NumInUse" class="form-control" />
+					<ValidationMessage For="() => brick.NumInUse" />
 				</div>
 				<div class="mb-3">
 					<label for="locationId" class="form-label">Location Id:</label>
@@ -81,7 +86,8 @@ else
 			brick = new()
 			{
 				BrickId = string.Empty,
-				Count = 0,
+				NumAvailable = 0,
+				NumInUse = 0,
 				LocationId = string.Empty
 			};
 			title = "New Brick";

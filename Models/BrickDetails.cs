@@ -14,7 +14,8 @@ namespace LegoCollectionUI.Models
         [JsonConverter(typeof(StringConverter))]
         public string? ColorId { get; set; }
         [Range(0,100000)]
-        public int Count { get; set; }        
+        public int NumAvailable { get; set; }        
+        public int NumInUse { get; set; }
         public required string LocationId { get; set; }
     }
 }

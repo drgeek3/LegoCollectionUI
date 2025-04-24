@@ -8,10 +8,12 @@
         public required string Subcategory { get; set; }
         public required string Container { get; set; }
         public required string Unit { get; set; }
-        public required string UnitRow { get; set; }
-        public required string Drawer { get; set; }
+        public int UnitRow { get; set; }
+        public int Drawer { get; set; }
         public required string Color { get; set; }
-        public int Count { get; set; }
+        public int NumAvailable { get; set; }
+        public int NumInUse { get; set; }
+        public string? AltBrickId { get; set; }
         public bool Overloaded { get; set; }
         public bool Underfilled { get; set; }
         public bool LocEmpty { get; set; }

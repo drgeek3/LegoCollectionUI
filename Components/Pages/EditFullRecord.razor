@@ -1,0 +1,111 @@
+﻿@page "/editbrickreport"
+@page "/editbrickreport/{Id:int}"
+@rendermode InteractiveServer
+
+@inject NavigationManager NavigationManager
+@inject FullBrickReportClient BrickReportClient
+@inject ColorsClient Colors
+
+<PageTitle>@title</PageTitle>
+
+@* <h3>@title</h3>
+
+@if(colors is null || brick is null)
+{
+	<p><em>Loading...</em></p>
+}
+else
+{
+	<div class="row">
+		<div class="col-md-4">
+			<EditForm Model="@brick" FormName="editBrick" OnValidSubmit="HandleSubmitAsync" Enhance>
+				<DataAnnotationsValidator />
+				<ValidationSummary />
+				<div class="mb-3">
+					<label for="brickId" class="form-label">Brick Id:</label>
+					<InputText id="brickId" @bind-Value="brick.BrickId" class="form-control" />
+					<ValidationMessage For="() => brick.BrickId" />
+				</div>
+				<div class="mb-3">
+					<label for="color" class="form-label">Color:</label>
+					<InputSelect id="color" @bind-Value="brick.ColorId" class="form-control">
+						<option value="">Select a color</option>
+						@foreach (var color in colors)
+				{
+						<option value="@color.Id">@color.Name</option>
+				}
+					</InputSelect>
+					<ValidationMessage For="() => brick.ColorId" />
+				</div>
+				<div class="mb-3">
+					<label for="count" class="form-label">Count:</label>
+					<InputNumber id="count" @bind-Value="brick.NumAvailable" class="form-control" />
+					<ValidationMessage For="() => brick.NumAvailable" />
+				</div>
+				<div class="mb-3">
+					<label for="locationId" class="form-label">Location Id:</label>
+					<InputText id="locationId" @bind-Value="brick.LocationId" class="form-control" />
+				</div>
+				<button type="submit" class="btn btn-primary">Save</button>
+				<a role="button" class="btn btn-secondary" href="/owned">Cancel</a>
+			</EditForm>
+		</div>
+	</div>
+}
+ *@
+@code{
+	// [Parameter]
+	// public int? Id { get; set; }
+
+	// [SupplyParameterFromForm]
+	// private BrickReport? brick { get; set; }
+
+	// private ColorList[]? colors;
+
+	private string title = string.Empty;
+
+	// protected override async Task OnParametersSetAsync()
+	// {
+	// 	if (brick is not null)
+	// 	{
+	// 		return;
+	// 	}
+
+	// 	if (Id is not null)
+	// 	{
+	// 		brick = await BrickReportClient.GetBrickAsync(Id.Value);
+	// 		title = $"Edit {brick.BrickId}";
+	// 	}
+	// 	else
+	// 	{
+	// 		brick = new()
+	// 			{
+	// 				BrickId = string.Empty,
+	// 				NumAvailable = 0,
+	// 				LocationId = string.Empty
+	// 			};
+	// 		title = "New Full Brick Report";
+	// 	}
+	// }
+
+	// protected override async Task OnInitializedAsync()
+	// {
+	// 	colors = await Colors.GetColorsAsync();
+	// }
+
+	// private async Task HandleSubmitAsync()
+	// {
+	// 	ArgumentNullException.ThrowIfNull(brick);
+	// 	if (Id is null)
+	// 	{
+	// 		await BrickReportClient.AddBrickAsync(brick);
+	// 	}
+	// 	else
+	// 	{
+	// 		brick.Id = Id.Value;
+	// 		await BrickReportClient.UpdateBrickAsync(brick);
+	// 	}
+
+	// 	NavigationManager.NavigateTo("/owned");
+	// }
+}

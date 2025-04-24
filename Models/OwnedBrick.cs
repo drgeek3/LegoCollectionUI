@@ -11,7 +11,8 @@ namespace LegoCollectionUI.Models
         [Required(ErrorMessage = "The Color field is required.")]
         public required string Color { get; set; }
         [Range(0, 100000)]
-        public int Count { get; set; }
+        public int NumAvailable { get; set; }
+        public int NumInUse { get; set; }
         public required string LocationId { get; set; } 
 
     }
