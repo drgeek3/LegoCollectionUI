@@ -66,6 +66,6 @@ namespace LegoCollectionUI.Clients
         ];
 
 
-        public async Task<BrickReport[]> GetBrickReportAsync() => await httpClient.GetFromJsonAsync<BrickReport[]>("/") ?? [];
+        public async Task<BrickReport[]> GetBrickReportAsync() => await httpClient.GetFromJsonAsync<BrickReport[]>("legos") ?? [];
     }
 }

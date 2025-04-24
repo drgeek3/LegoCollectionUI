@@ -34,7 +34,7 @@ namespace LegoCollectionUI.Clients
 
         private readonly ColorList[] colors = new ColorsClient(httpClient).GetColors();
 
-        public async Task<OwnedBrick[]> GetOwnedBricksAsync() => await httpClient.GetFromJsonAsync<OwnedBrick[]>("owned") ?? [];
+        public async Task<OwnedBrick[]> GetOwnedBricksAsync() => await httpClient.GetFromJsonAsync<OwnedBrick[]>("legos/owned") ?? [];
 
         public void AddBrick(BrickDetails brick)
         {
