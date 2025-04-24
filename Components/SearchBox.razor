@@ -1,21 +1,21 @@
-﻿@typeparam TEntity
+﻿
+<form @onsubmit=OnSearchClicked>
+	<table class="table table-hover" style="max-width:630px">
+		<tbody>
+			<tr>
+				<td>
+					<input class="form-control border-2" style="max-width:400px" placeholder="Search Brick Id..." @bind="searchItem" />
+				</td>
+				<td>
+					<button class="form-control btn btn-primary" style="max-width:200px">Search</button>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</form>
 
-<table class="table table-hover" style="max-width:630px">
-	<tbody>
-		<tr>
-			<td>
-				<input class="form-control border-2" style="max-width:400px" placeholder="Search Brick Id..." @bind="searchItem" />
-			</td>
-			<td>
-				<button class="form-control btn btn-primary" style="max-width:200px" @onclick=OnSearchClicked>Search</button>
-			</td>
-		</tr>
-	</tbody>
-</table>
 
 @code {
-	[Parameter]
-	public List<TEntity> Items { get; set; }
 
 	[Parameter]
 	public EventCallback<string> OnSearch { get; set; }

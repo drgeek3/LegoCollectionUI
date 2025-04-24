@@ -6,7 +6,7 @@
 <PageTitle>Lego Collection</PageTitle>
 
 <div class="w-100">
-    <SearchBox Items="bricks" OnSearch="UpdateFilteredBricks"></SearchBox>
+    <SearchBox OnSearch="UpdateFilteredBricks"></SearchBox>
 </div>
 
 @if (bricks is null)
@@ -63,7 +63,7 @@ else
 @code {
 
     private List<BrickReport>? bricks;
-    private List<BrickReport>? filteredBricks = new();
+   // private List<BrickReport>? filteredBricks = new();
 
     protected override async Task OnInitializedAsync()
     {

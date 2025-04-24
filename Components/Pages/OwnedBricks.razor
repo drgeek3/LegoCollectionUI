@@ -1,8 +1,13 @@
 ﻿@page "/owned"
 @inject OwnedClient Owned
 @attribute [StreamRendering]
+@rendermode InteractiveServer
 
 <PageTitle>Owned Bricks</PageTitle>
+
+<div class="w-100">
+    <SearchBox OnSearch="UpdateFilteredBricks"></SearchBox>
+</div>
 
 <div class="mt-2 mb-2">
     <a class="btn btn-primary" role="button" href="/editbrick">Add Brick</a>
@@ -63,5 +68,17 @@ else
     private string GetDeleteModalId(OwnedBrick brick)
     {
         return $"#{DeleteOwned.GetModalId(brick)}";
+    }
+
+    private async Task UpdateFilteredBricks(string searchTerm)
+    {
+        if (string.IsNullOrEmpty(searchTerm))
+        {
+            bricks = await Owned.GetOwnedBricksAsync();
+        }
+        else
+        {
+            bricks = await Owned.GetBrickIdAsync(searchTerm); 
+        }
     }
 }
