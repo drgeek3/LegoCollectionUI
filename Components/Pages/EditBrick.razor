@@ -18,7 +18,7 @@ else
 {
 	<div class="row">
 		<div class="col-md-4">
-			<EditForm Model="@brick" FormName="editBrick" OnValidSubmit="HandleSubmit">
+			<EditForm Model="@brick" FormName="editBrick" OnValidSubmit="HandleSubmitAsync" Enhance>
 				<DataAnnotationsValidator />
 				<ValidationSummary />
 				<div class="mb-3">
@@ -64,7 +64,7 @@ else
 
 	private string title = string.Empty;
 
-	protected override void OnParametersSet()
+	protected override async Task OnParametersSetAsync()
 	{
 		if (brick is not null)
 		{
@@ -73,7 +73,7 @@ else
 
 		if (Id is not null)
 		{
-			brick = Owned.GetBrick(Id.Value);
+			brick = await Owned.GetBrickAsync(Id.Value);
 			title = $"Edit {brick.BrickId}";
 		} 
 		else
@@ -88,21 +88,21 @@ else
 		}
 	}
 
-	protected override void OnInitialized()
+	protected override async Task OnInitializedAsync()
 	{
-		colors = Colors.GetColors();
+		colors = await Colors.GetColorsAsync();
 	}
 
-	private void HandleSubmit()
+	private async Task HandleSubmitAsync()
 	{
 		ArgumentNullException.ThrowIfNull(brick);
 		if (Id is null)
 		{
-			Owned.AddBrick(brick);			
+			await Owned.AddBrickAsync(brick);			
 		} else
 		{
 			brick.Id = Id.Value;
-			Owned.UpdateBrick(brick);
+			await Owned.UpdateBrickAsync(brick);
 		}
 
 		NavigationManager.NavigateTo("/owned");

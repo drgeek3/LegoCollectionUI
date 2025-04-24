@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using LegoCollectionUI.Converters;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace LegoCollectionUI.Models
 {
@@ -9,6 +11,7 @@ namespace LegoCollectionUI.Models
         [StringLength(45)]
         public required string BrickId { get; set; }
         [Required(ErrorMessage = "The Color field is required.")]
+        [JsonConverter(typeof(StringConverter))]
         public string? ColorId { get; set; }
         [Range(0,100000)]
         public int Count { get; set; }        
