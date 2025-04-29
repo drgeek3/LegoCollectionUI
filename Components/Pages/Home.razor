@@ -6,6 +6,7 @@
 <PageTitle>Lego Collection</PageTitle>
 
 <div class="w-100">
+    <b>Search Brick Id</b>
     <SearchBox OnSearch="UpdateFilteredBricks"></SearchBox>
 </div>
 
@@ -52,9 +53,21 @@ else
                     <td>@brick.NumAvailable</td>
                     <td>@brick.NumInUse</td>
                     <td>@brick.AltBrickId</td>
-                    <td>@brick.Overloaded</td>
-                    <td>@brick.Underfilled</td>
-                    <td>@brick.LocEmpty</td>
+                    <td>@if(@brick.Overloaded)
+                        {
+                            <i class="bi bi-check-square-fill"></i>
+                        }
+                    </td>
+                    <td>@if(@brick.Underfilled)
+                        {
+                            <i class="bi bi-check-square-fill"></i>
+                        }
+                    </td>
+                    <td>@if(@brick.LocEmpty)
+                        {
+                            <i class="bi bi-check-square-fill"></i>
+                        }
+                    </td>
                     <td>
 
                     </td>

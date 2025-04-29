@@ -1,0 +1,125 @@
+﻿@page "/editLocation"
+@page "/editLocation/{Id:int}"
+
+@rendermode InteractiveServer
+
+@inject NavigationManager NavigationManager
+@inject LocationClient Client
+
+<PageTitle>@title</PageTitle>
+
+<h3>@title</h3>
+
+@if (location is null)
+{
+	<p><em>Loading...</em></p>
+}
+else
+{
+	<div class="row">
+		<div class="col-md-4">
+			<EditForm Model="@location" FormName="editLocation" OnValidSubmit="HandleSubmitAsync" Enhance>
+				<DataAnnotationsValidator />
+				<ValidationSummary />
+				<div class="mb-3">
+					<label for="locationId" class="form-label">Location Id:</label>
+					<InputText id="locationId" @bind-Value="location.LocationId" class="form-control" />
+					<ValidationMessage For="() => location.LocationId" />
+				</div>
+				<div class="mb-3">
+					<label for="container" class="form-label">Container:</label>
+					<InputText id="container" @bind-Value="location.Container" class="form-control" />
+					<ValidationMessage For="() => location.Container" />
+				</div>
+				<div class="mb-3">
+					<label for="unit" class="form-label">Unit:</label>
+					<InputText id="unit" @bind-Value="location.Unit" class="form-control" />
+					<ValidationMessage For="() => location.Unit" />
+				</div>
+				<div class="mb-3">
+					<label for="unitRow" class="form-label">Unit Row:</label>
+					<InputNumber id="unitRow" @bind-Value="location.UnitRow" class="form-control" />
+					<ValidationMessage For="() => location.UnitRow" />
+				</div>
+				<div class="mb-3">
+					<label for="drawer" class="form-label">Drawer:</label>
+					<InputNumber id="drawer" @bind-Value="location.Drawer" class="form-control" />
+				</div>
+				<div class="mb-3">
+					<label for="overloaded" class="form-label">Overfilled:</label>
+					<InputCheckbox id="overloaded" @bind-Value="location.Overloaded" />
+				</div>
+				<div class="mb-3">
+					<label for="underfilled" class="form-label">Underfilled:</label>
+					<InputCheckbox id="underfilled" @bind-Value="location.Underfilled" />
+				</div>
+				<div class="mb-3">
+					<label for="locationempty" class="form-label">Empty:</label>
+					<InputCheckbox id="locationempty" @bind-Value="location.LocationEmpty" />
+				</div>
+				<button type="submit" class="btn btn-primary">Save</button>
+				<a role="button" class="btn btn-secondary" href="/locations">Cancel</a>
+			</EditForm>
+		</div>
+	</div>
+}
+
+@code {
+	[Parameter]
+	public int? Id { get; set; }
+
+	[SupplyParameterFromForm]
+	private LocationModel? location { get; set; }
+
+	private string title = string.Empty;
+
+	protected override async Task OnParametersSetAsync()
+	{
+		if (location is not null)
+		{
+			return;
+		}
+
+		if (Id is not null)
+		{
+			location = await Client.GetLocationAsync(Id.Value);
+			title = $"Edit {location.LocationId}";
+		}
+		else
+		{
+			location = new()
+				{
+					LocationId = string.Empty,
+					Container = string.Empty,
+					Unit = string.Empty,
+					UnitRow = 0,
+					Drawer = 0,
+					Overloaded = false,
+					Underfilled = false,
+					LocationEmpty = false
+				};
+			title = "New Location";
+		}
+	}
+
+	private void OverloadedChanged()
+	{
+		Console.WriteLine($"Overloaded Changed {location.Overloaded}");
+	}
+
+	private async Task HandleSubmitAsync()
+	{
+		ArgumentNullException.ThrowIfNull(location);
+		if (Id is null)
+		{
+			await Client.AddLocationAsync(location);
+		}
+		else
+		{
+			location.Id = Id.Value;
+			await Client.UpdateLocationAsync(location);
+		}
+
+		NavigationManager.NavigateTo("/locations");
+	}
+}
