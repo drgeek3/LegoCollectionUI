@@ -8,7 +8,7 @@
 
 <PageTitle>@title</PageTitle>
 
-@* <h3>@title</h3>
+<h3>@title</h3>
 
 @if(colors is null || brick is null)
 {
@@ -18,7 +18,7 @@ else
 {
 	<div class="row">
 		<div class="col-md-4">
-			<EditForm Model="@brick" FormName="editBrick" OnValidSubmit="HandleSubmitAsync" Enhance>
+			<EditForm Model="@brick" FormName="editFullReport" OnValidSubmit="HandleSubmitAsync" Enhance>
 				<DataAnnotationsValidator />
 				<ValidationSummary />
 				<div class="mb-3">
@@ -27,85 +27,155 @@ else
 					<ValidationMessage For="() => brick.BrickId" />
 				</div>
 				<div class="mb-3">
-					<label for="color" class="form-label">Color:</label>
-					<InputSelect id="color" @bind-Value="brick.ColorId" class="form-control">
-						<option value="">Select a color</option>
-						@foreach (var color in colors)
-				{
-						<option value="@color.Id">@color.Name</option>
-				}
-					</InputSelect>
-					<ValidationMessage For="() => brick.ColorId" />
+					<label for="description" class="form-label">Description:</label>
+					<InputText id="description" @bind-Value="brick.Description" class="form-control" />
+					<ValidationMessage For="() => brick.Description" />
 				</div>
 				<div class="mb-3">
-					<label for="count" class="form-label">Count:</label>
-					<InputNumber id="count" @bind-Value="brick.NumAvailable" class="form-control" />
+					<label for="category" class="form-label">Category:</label>
+					<InputText id="category" @bind-Value="brick.Category" class="form-control" />
+					<ValidationMessage For="() => brick.Category" />
+				</div>
+				<div class="mb-3">
+					<label for="subcategory" class="form-label">Subcategory:</label>
+					<InputText id="subcategory" @bind-Value="brick.Subcategory" class="form-control" />
+					<ValidationMessage For="() => brick.Subcategory" />
+				</div>
+				<div class="mb-3">
+					<label for="container" class="form-label">Container:</label>
+					<InputText id="container" @bind-Value="brick.Container" class="form-control" />
+					<ValidationMessage For="() => brick.Container" />
+				</div>
+				<div class="mb-3">
+					<label for="unit" class="form-label">Unit:</label>
+					<InputText id="unit" @bind-Value="brick.Unit" class="form-control" />
+					<ValidationMessage For="() => brick.Unit" />
+				</div>
+				<div class="mb-3">
+					<label for="unitRow" class="form-label">Unit Row:</label>
+					<InputNumber id="unitRow" @bind-Value="brick.UnitRow" class="form-control" />
+					<ValidationMessage For="() => brick.UnitRow" />
+				</div>
+				<div class="mb-3">
+					<label for="drawer" class="form-label">Drawer:</label>
+					<InputNumber id="drawer" @bind-Value="brick.Drawer" class="form-control" />
+					<ValidationMessage For="() => brick.Drawer" />
+				</div>
+				<div class="mb-3">
+					<label for="color" class="form-label">Color:</label>
+					<InputSelect id="color" @bind-Value="brick.Color" class="form-control">
+						<option value="">Select a color</option>
+						@foreach (var color in colors)
+						{
+							<option value="@color.Name">@color.Name</option>
+						}
+					</InputSelect>
+					<ValidationMessage For="() => brick.Color" />
+				</div>
+@* 				<div class="mb-3">
+					<label for="color" class="form-label">Color:</label>
+					<InputText id="color" @bind-Value="brick.Color" class="form-control" />
+					<ValidationMessage For="() => brick.Color" />
+				</div> *@
+				<div class="mb-3">
+					<label for="numAvailable" class="form-label">Number Available:</label>
+					<InputNumber id="numAvailable" @bind-Value="brick.NumAvailable" class="form-control" />
 					<ValidationMessage For="() => brick.NumAvailable" />
 				</div>
 				<div class="mb-3">
-					<label for="locationId" class="form-label">Location Id:</label>
-					<InputText id="locationId" @bind-Value="brick.LocationId" class="form-control" />
+					<label for="numInUse" class="form-label">Number In Use:</label>
+					<InputNumber id="numInUse" @bind-Value="brick.NumInUse" class="form-control" />
+					<ValidationMessage For="() => brick.NumInUse" />
+				</div>
+				<div class="mb-3">
+					<label for="altBrickId" class="form-label">Alt. Brick Id:</label>
+					<InputText id="altBrickId" @bind-Value="brick.AltBrickId" class="form-control" />
+					<ValidationMessage For="() => brick.AltBrickId" />
+				</div>
+				<div class="mb-3">
+					<label for="overloaded" class="form-label">Overfilled:</label>
+					<InputCheckbox id="overloaded" @bind-Value="brick.Overloaded" />
+				</div>
+				<div class="mb-3">
+					<label for="underfilled" class="form-label">Underfilled:</label>
+					<InputCheckbox id="underfilled" @bind-Value="brick.Underfilled" />
+				</div>
+				<div class="mb-3">
+					<label for="locempty" class="form-label">Empty:</label>
+					<InputCheckbox id="locempty" @bind-Value="brick.LocEmpty" />
 				</div>
 				<button type="submit" class="btn btn-primary">Save</button>
-				<a role="button" class="btn btn-secondary" href="/owned">Cancel</a>
+				<a role="button" class="btn btn-secondary" href="/">Cancel</a>
 			</EditForm>
 		</div>
 	</div>
 }
- *@
+
 @code{
-	// [Parameter]
-	// public int? Id { get; set; }
+	[Parameter]
+	public int? Id { get; set; }
 
-	// [SupplyParameterFromForm]
-	// private BrickReport? brick { get; set; }
+	[SupplyParameterFromForm]
+	private BrickReport? brick { get; set; }
 
-	// private ColorList[]? colors;
+	private ColorList[]? colors;
 
 	private string title = string.Empty;
 
-	// protected override async Task OnParametersSetAsync()
-	// {
-	// 	if (brick is not null)
-	// 	{
-	// 		return;
-	// 	}
+	protected override async Task OnParametersSetAsync()
+	{
+		if (brick is not null)
+		{
+			return;
+		}
 
-	// 	if (Id is not null)
-	// 	{
-	// 		brick = await BrickReportClient.GetBrickAsync(Id.Value);
-	// 		title = $"Edit {brick.BrickId}";
-	// 	}
-	// 	else
-	// 	{
-	// 		brick = new()
-	// 			{
-	// 				BrickId = string.Empty,
-	// 				NumAvailable = 0,
-	// 				LocationId = string.Empty
-	// 			};
-	// 		title = "New Full Brick Report";
-	// 	}
-	// }
+		// if (Id is not null)
+		// {
+		// 	brick = await BrickReportClient.GetSingleBrickAsync(Id.Value);
+		// 	title = $"Edit {brick.BrickId}";
+		// }
+		// else
+		// {
+			brick = new()
+				{
+					BrickId = string.Empty,
+					Description = string.Empty,
+					Category = string.Empty,
+					Subcategory = string.Empty,
+					Container = string.Empty,
+					Unit = string.Empty,
+					UnitRow = 0,
+					Drawer = 0,		
+					Color = string.Empty,
+					NumAvailable = 0,
+					NumInUse = 0,
+					AltBrickId = string.Empty,
+					Overloaded = false,
+					Underfilled = false,
+					LocEmpty = false
+				};
+			title = "New Full Brick Report";
+		// }
+	}
 
-	// protected override async Task OnInitializedAsync()
-	// {
-	// 	colors = await Colors.GetColorsAsync();
-	// }
+	protected override async Task OnInitializedAsync()
+	{
+		colors = await Colors.GetColorsAsync();
+	}
 
-	// private async Task HandleSubmitAsync()
-	// {
-	// 	ArgumentNullException.ThrowIfNull(brick);
-	// 	if (Id is null)
-	// 	{
-	// 		await BrickReportClient.AddBrickAsync(brick);
-	// 	}
-	// 	else
-	// 	{
-	// 		brick.Id = Id.Value;
-	// 		await BrickReportClient.UpdateBrickAsync(brick);
-	// 	}
+	private async Task HandleSubmitAsync()
+	{
+		ArgumentNullException.ThrowIfNull(brick);
+		if (Id is null)
+		{
+			await BrickReportClient.AddFullReportAsync(brick);
+		}
+		// else
+		// {
+		// 	brick.Id = Id.Value;
+		// 	await BrickReportClient.UpdateBrickAsync(brick);
+		// }
 
-	// 	NavigationManager.NavigateTo("/owned");
-	// }
+		NavigationManager.NavigateTo("/");
+	}
 }

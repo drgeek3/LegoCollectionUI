@@ -10,7 +10,7 @@
         public required string Unit { get; set; }
         public int UnitRow { get; set; }
         public int Drawer { get; set; }
-        public required string Color { get; set; }
+        public string? Color { get; set; }
         public int NumAvailable { get; set; }
         public int NumInUse { get; set; }
         public string? AltBrickId { get; set; }
