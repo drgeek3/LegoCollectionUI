@@ -8,8 +8,8 @@
         public required string Subcategory { get; set; }
         public required string Container { get; set; }
         public required string Unit { get; set; }
-        public int UnitRow { get; set; }
-        public int Drawer { get; set; }
+        public string? UnitRow { get; set; }
+        public string? Drawer { get; set; }
         public string? Color { get; set; }
         public int NumAvailable { get; set; }
         public int NumInUse { get; set; }

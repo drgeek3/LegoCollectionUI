@@ -53,12 +53,12 @@ else
 				</div>
 				<div class="mb-3">
 					<label for="unitRow" class="form-label">Unit Row:</label>
-					<InputNumber id="unitRow" @bind-Value="brick.UnitRow" class="form-control" />
+					<InputText id="unitRow" @bind-Value="brick.UnitRow" class="form-control" />
 					<ValidationMessage For="() => brick.UnitRow" />
 				</div>
 				<div class="mb-3">
 					<label for="drawer" class="form-label">Drawer:</label>
-					<InputNumber id="drawer" @bind-Value="brick.Drawer" class="form-control" />
+					<InputText id="drawer" @bind-Value="brick.Drawer" class="form-control" />
 					<ValidationMessage For="() => brick.Drawer" />
 				</div>
 				<div class="mb-3">
@@ -144,8 +144,8 @@ else
 					Subcategory = string.Empty,
 					Container = string.Empty,
 					Unit = string.Empty,
-					UnitRow = 0,
-					Drawer = 0,		
+					UnitRow = string.Empty,
+					Drawer = string.Empty,
 					Color = string.Empty,
 					NumAvailable = 0,
 					NumInUse = 0,
