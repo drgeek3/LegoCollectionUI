@@ -17,6 +17,7 @@
         public bool Overloaded { get; set; }
         public bool Underfilled { get; set; }
         public bool LocEmpty { get; set; }
+        public string? ImageLoc { get; set; }
 
     }
 }

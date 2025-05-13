@@ -14,6 +14,7 @@ namespace LegoCollectionUI.Models
         public int NumAvailable { get; set; }
         public int NumInUse { get; set; }
         public required string LocationId { get; set; } 
+        public string? ImageLoc { get; set; }
 
     }
 }
