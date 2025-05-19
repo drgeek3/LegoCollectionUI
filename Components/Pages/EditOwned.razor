@@ -1,0 +1,129 @@
+﻿@page "/editowned"
+@page "/editowned/{Id:int}"
+@rendermode InteractiveServer
+
+@inject NavigationManager NavigationManager
+@inject OwnedClient Owned
+@inject ColorsClient Colors
+
+<PageTitle>@title</PageTitle>
+
+<h3>@title</h3>
+
+@if(colors is null || brick is null)
+{
+	<p><em>Loading...</em></p>
+}
+else
+{
+	<div class="row">
+		<div class="col-md-4">
+			<EditForm Model="@brick" FormName="editOwned" OnValidSubmit="HandleSubmitAsync" Enhance>
+				<DataAnnotationsValidator />
+				<ValidationSummary />
+				<div class="mb-3">
+					<label for="brickId" class="form-label">Brick Id:</label>
+					<InputText id="brickId" @bind-Value="brick.BrickId" class="form-control" />      
+					<ValidationMessage For="() => brick.BrickId" />
+				</div>
+				<div class="mb-3">
+					<label for="color" class="form-label">Color:</label>
+					<InputSelect id="color" @bind-Value="brick.ColorId" class="form-control">
+						<option value="">Select a color</option>
+						@foreach (var color in colors)
+						{
+							<option value="@color.Id">@color.Name</option>
+						}
+					</InputSelect>
+					<ValidationMessage For="() => brick.ColorId" />
+				</div>
+				<div class="mb-3">
+					<label for="numavail" class="form-label">Number Available:</label>
+					<InputNumber id="numavail" @bind-Value="brick.NumAvailable" class="form-control" />
+					<ValidationMessage For="() => brick.NumAvailable" />
+				</div>
+				<div class="mb-3">
+					<label for="numinuse" class="form-label">Number In Use:</label>
+					<InputNumber id="numinuse" @bind-Value="brick.NumInUse" class="form-control" />
+					<ValidationMessage For="() => brick.NumInUse" />
+				</div>
+				<div class="mb-3">
+					<label for="locationId" class="form-label">Location Id:</label>
+					<InputText id="locationId" @bind-Value="brick.LocationId" class="form-control" />
+				</div>
+				<button type="submit" class="btn btn-primary" @onclick=@(_=>GetValue("add"))>Save and Add Another</button>
+				<button type="submit" class="btn btn-primary" @onclick=@(_=>GetValue("save"))>Save and Close</button>
+				<a role="button" class="btn btn-secondary" href="/owned">Cancel</a>
+			</EditForm>
+		</div>
+	</div>
+}
+
+@code {
+	[Parameter]
+	public int? Id { get; set; }
+
+	[SupplyParameterFromForm]
+	private BrickDetails? brick { get; set; } 
+
+	private ColorList[]? colors;
+
+	private string title = string.Empty;
+
+	private string buttonValue = string.Empty;
+
+	private void GetValue(string value)
+	{
+		buttonValue = value;
+	}
+
+	protected override async Task OnParametersSetAsync()
+	{
+		if (brick is not null)
+		{
+			return;
+		}
+
+		if (Id is not null)
+		{
+			brick = await Owned.GetBrickAsync(Id.Value);
+			title = $"Edit {brick.BrickId}";
+		} 
+		else
+		{
+			brick = new()
+			{
+				BrickId = string.Empty,
+				NumAvailable = 0,
+				NumInUse = 0,
+				LocationId = string.Empty
+			};
+			title = "New Brick";
+		}
+	}
+
+	protected override async Task OnInitializedAsync()
+	{
+		colors = await Colors.GetColorsAsync();
+	}
+
+	private async Task HandleSubmitAsync()
+	{
+		ArgumentNullException.ThrowIfNull(brick);
+		if (Id is null)
+		{
+			await Owned.AddBrickAsync(brick);			
+		} else
+		{
+			brick.Id = Id.Value;
+			await Owned.UpdateBrickAsync(brick);
+		}
+
+		if (buttonValue == "save")
+		{
+			NavigationManager.NavigateTo("/owned");
+		}
+
+		
+	}
+}

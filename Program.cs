@@ -18,6 +18,7 @@ builder.Services.AddHttpClient<OwnedClient>(client => client.BaseAddress = new U
 builder.Services.AddHttpClient<ColorsClient>(client => client.BaseAddress = new Uri(legoCollectionApiUrl));
 builder.Services.AddHttpClient<FullBrickReportClient>(client => client.BaseAddress = new Uri(legoCollectionApiUrl));
 builder.Services.AddHttpClient<LocationClient>(client => client.BaseAddress = new Uri(legoCollectionApiUrl));
+builder.Services.AddHttpClient<BricksClient>(client => client.BaseAddress = new Uri(legoCollectionApiUrl));
 
 //Add Clients to IServiceProviders for lifetime of app
 //builder.Services.AddSingleton<OwnedClient>();

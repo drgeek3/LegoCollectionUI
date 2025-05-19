@@ -8,5 +8,6 @@
         public required string Category { get; set; }
         public required string Subcategory { get; set; }
         public string? AltBrickId { get; set; }
+        public string? ImageLoc { get; set; }
     }
 }

@@ -1,17 +1,18 @@
-﻿@page "/owned"
+﻿@page "/bricks"
 @using Microsoft.AspNetCore.Authorization
-@inject OwnedClient Owned
+@inject BricksClient bricksClient
 @attribute [StreamRendering]
 @rendermode InteractiveServer
 
-<PageTitle>Owned Bricks</PageTitle>
+<PageTitle>Bricks</PageTitle>
 
 <div class="w-100">
+    <b>Search Brick Id</b>
     <SearchBox OnSearch="UpdateFilteredBricks"></SearchBox>
 </div>
 
 <div class="mt-2 mb-2">
-    <a class="btn btn-primary" role="button" href="/editowned">Add Brick</a>
+    <a class="btn btn-primary" role="button" href="/editbrick">Add Brick</a>
 </div>
 
 @if (bricks is null)
@@ -23,12 +24,12 @@ else
     <table class="table table-striped table-bordered table-hover">
         <thead class="table-dark">
             <tr>
-                <th>Image></th>
+                <th>Image</th>
                 <th>Brick Id</th>
-                <th>Color</th>
-                <th>Num Available</th>
-                <th>Num In Use</th>
-                <th>Location Id</th>
+                <th>Description</th>
+                <th>Category</th>
+                <th>Subcategory</th>
+                <th>Alt Brick Id</th>
                 <th></th>
             </tr>
         </thead>
@@ -36,22 +37,22 @@ else
             @foreach (var brick in bricks)
             {
                 <tr>
-                    <td><img src="@brick.ImageLoc" alt="" /></td>
+                    <td><img src="@brick.ImageLoc" alt=""/></td>
                     <td>@brick.BrickId</td>
-                    <td>@brick.Color</td>
-                    <td>@brick.NumAvailable</td>
-                    <td>@brick.NumInUse</td>
-                    <td>@brick.LocationId</td>
+                    <td>@brick.Description</td>
+                    <td>@brick.Category</td>
+                    <td>@brick.Subcategory</td>
+                    <td>@brick.AltBrickId</td>
                     <td>
                         <div class="d-flex">
-                            <a class="btn btn-primary me-2" role="button" href="@OwnedUrl(brick.Id)">
+                            <a class="btn btn-primary me-2" role="button" href="@BricksUrl(brick.Id)">
                                 <i class="bi bi-pencil"></i>
-                            </a>                            
+                            </a>
                             <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="@GetDeleteModalId(brick)">
                                 <i class="bi bi-x-lg"></i>
                             </button>
-                        </div>                        
-                        <DeleteOwned Brick="@brick" />
+                        </div>
+                        <DeleteBrick Bricks="@brick" />
                     </td>
                 </tr>
             }
@@ -61,34 +62,36 @@ else
 
 @code {
 
-    private OwnedBrick[]? bricks;
+    private BricksModel[]? bricks;
 
     protected override async Task OnInitializedAsync()
     {
-        bricks = await Owned.GetOwnedBricksAsync();
+        bricks = await bricksClient.GetBricksAsync();
+
         foreach (var brick in bricks)
         {
             brick.ImageLoc = "/images/M" + brick.BrickId + ".png";
         }
     }
 
-    private static string OwnedUrl(int id) => $"/editowned/{id}";
+    private static string BricksUrl(int id) => $"/editbrick/{id}";
 
-    private string GetDeleteModalId(OwnedBrick brick)
+    private string GetDeleteModalId(BricksModel brick)
     {
-        return $"#{DeleteOwned.GetModalId(brick)}";
+        return $"#{DeleteBrick.GetModalId(brick)}";
     }
 
     private async Task UpdateFilteredBricks(string searchTerm)
     {
         if (string.IsNullOrEmpty(searchTerm))
         {
-            bricks = await Owned.GetOwnedBricksAsync();
+            bricks = await bricksClient.GetBricksAsync();
         }
         else
         {
-            bricks = await Owned.GetBrickIdAsync(searchTerm); 
+            bricks = await bricksClient.GetBrickIdAsync(searchTerm);
         }
+
         foreach (var brick in bricks)
         {
             brick.ImageLoc = "/images/M" + brick.BrickId + ".png";
