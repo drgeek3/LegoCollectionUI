@@ -5,12 +5,13 @@
 
 @inject NavigationManager NavigationManager
 @inject BricksClient Client
+@inject CategoriesClient Categories
 
 <PageTitle>@title</PageTitle>
 
 <h3>@title</h3>
 
-@if (brick is null)
+@if (categories is null || brick is null)
 {
 	<p><em>Loading...</em></p>
 }
@@ -21,7 +22,7 @@ else
 			<EditForm Model="@brick" FormName="editbrick" OnValidSubmit="HandleSubmitAsync" Enhance>
 				<DataAnnotationsValidator />
 				<ValidationSummary />
- 				<div class="mb-3">
+				<div class="mb-3">
 					<label for="brickId" class="form-label">Brick Id:</label>
 					<InputText id="brickId" @bind-Value="brick.BrickId" class="form-control" />
 					<ValidationMessage For="() => brick.BrickId" />
@@ -31,14 +32,41 @@ else
 					<InputText id="description" @bind-Value="brick.Description" class="form-control" />
 					<ValidationMessage For="() => brick.Description" />
 				</div>
-				<div class="mb-3">
+				@* 				<div class="mb-3">
 					<label for="category" class="form-label">Category:</label>
 					<InputText id="category" @bind-Value="brick.Category" class="form-control" />
 					<ValidationMessage For="() => brick.Category" />
-				</div>
+				</div> *@
 				<div class="mb-3">
+					<label for="category" class="form-label">Category:</label>
+					<InputSelect id="category" @bind-Value="brick.Category" class="form-control">
+						<option value="">Select a category</option>
+						@foreach (var category in categories)
+						{
+							@if (category.IsMain)
+							{
+								<option value="@category.Category">@category.Category</option>
+							}
+						}
+					</InputSelect>
+					<ValidationMessage For="() => brick.Category" />
+				</div>
+				@* 				<div class="mb-3">
 					<label for="subcategory" class="form-label">Subcategory:</label>
 					<InputText id="subcategory" @bind-Value="brick.Subcategory" class="form-control" />
+					<ValidationMessage For="() => brick.Subcategory" />
+				</div> *@
+				<div class="mb-3">
+					<label for="subcategory" class="form-label">Subcategory:</label>
+					<InputSelect id="subcategory" @bind-Value="brick.Subcategory" class="form-control">
+						<option value="">Select a Subcategory</option>
+						@foreach (var category in categories)
+						{
+							@if(category.Subcat.Contains(brick.Category)){
+								<option value="@category.Category">@category.Category</option>					
+							}
+						}
+					</InputSelect>
 					<ValidationMessage For="() => brick.Subcategory" />
 				</div>
 				<div class="mb-3">
@@ -58,6 +86,8 @@ else
 
 	[SupplyParameterFromForm]
 	private BricksModel? brick { get; set; }
+
+	private CategoriesModel[]? categories;
 
 	private string title = string.Empty;
 
@@ -85,6 +115,11 @@ else
 				};
 			title = "New Brick";
 		}
+	}
+
+	protected override async Task OnInitializedAsync()
+	{
+		categories = await Categories.GetCategoriesAsync();
 	}
 
 	private async Task HandleSubmitAsync()
