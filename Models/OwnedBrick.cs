@@ -13,6 +13,7 @@ namespace LegoCollectionUI.Models
         [Range(0, 100000)]
         public int NumAvailable { get; set; }
         public int NumInUse { get; set; }
+        [Required (ErrorMessage = "The Location Id is required.")]
         public required string LocationId { get; set; } 
         public string? ImageLoc { get; set; }
 
