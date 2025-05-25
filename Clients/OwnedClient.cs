@@ -10,7 +10,7 @@ namespace LegoCollectionUI.Clients
            => await httpClient.GetFromJsonAsync<OwnedBrick[]>($"legos/owned/brick/{brickid}")
            ?? throw new Exception("Could not find brick.");
 
-        public async Task AddBrickAsync(BrickDetails brick) 
+        public async Task<HttpResponseMessage> AddBrickAsync(BrickDetails brick) 
             => await httpClient.PostAsJsonAsync("legos/owned", brick);
 
         public async Task<BrickDetails> GetBrickAsync(int id)

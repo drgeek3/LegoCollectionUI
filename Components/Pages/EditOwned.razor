@@ -123,17 +123,22 @@ else
 		ArgumentNullException.ThrowIfNull(brick);
 		if (Id is null)
 		{
-			await Owned.AddBrickAsync(brick);
-			var tempColor = string.Empty;
-			foreach(var color in colors)
+			var result = await Owned.AddBrickAsync(brick);			
+			if (result.IsSuccessStatusCode)
 			{
-				if (color.Id.ToString() == brick.ColorId)
+				var tempColor = string.Empty;
+				foreach (var color in colors)
 				{
-					tempColor = color.Name;
+					if (color.Id.ToString() == brick.ColorId)
+					{
+						tempColor = color.Name;
+					}
 				}
+				addedMessage = $"{brick.NumAvailable} of {brick.BrickId} in {tempColor} added.";
+			} else
+			{
+				addedMessage = $"New {brick.BrickId} was not added.";
 			}
-			addedMessage = $"{brick.NumAvailable} of {brick.BrickId} in {tempColor} added.";
-
 		} else
 		{
 			brick.Id = Id.Value;
