@@ -59,9 +59,9 @@ else
 				</div>
 				@if (Id is null)
 				{
-					<button type="submit" class="btn btn-primary" @onclick=@(_=>GetValue("add"))>Save and Add Another</button>
+					<button type="submit" class="me-2 btn btn-primary" @onclick=@(_=>GetValue("add"))>Save and Add Another</button>
 				}
-				<button type="submit" class="btn btn-primary" @onclick=@(_=>GetValue("save"))>Save and Close</button>
+				<button type="submit" class="me-1 btn btn-primary" @onclick=@(_=>GetValue("save"))>Save and Close</button>
 				<a role="button" class="btn btn-secondary" href="/owned">Cancel</a>
 			</EditForm>
 		</div>

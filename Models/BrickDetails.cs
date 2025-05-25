@@ -14,7 +14,8 @@ namespace LegoCollectionUI.Models
         [JsonConverter(typeof(StringConverter))]
         public string? ColorId { get; set; }
         [Range(0,100000)]
-        public int NumAvailable { get; set; }        
+        public int NumAvailable { get; set; }
+        [Range(0,100000)]
         public int NumInUse { get; set; }
         [Required(ErrorMessage = "Location Id is required.")]
         public required string LocationId { get; set; }
